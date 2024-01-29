@@ -1,5 +1,6 @@
 package homework_7;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,27 +10,17 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.logging.FileHandler;
+import java.util.logging.SimpleFormatter;
 
 public class toy_shop {
     public static void main(String[] args) {
 
         mainMenuChoice();
 
-
-        
-        
-        Toys toy1 = new Toys(1, "конструктор", 20);
-        Toys toy2 = new Toys(2, "робот", 20);
-        Toys toy3 = new Toys(3, "кукла", 60);
-
-        Map<Integer, Integer> map = new HashMap<>();
-        map.put(toy1.toy_value, toy1.toy_id);
-        map.put(toy2.toy_value, toy2.toy_id);
-        map.put(toy3.toy_value, toy3.toy_id);
-
-        
     }
     private static HashMap<Integer, Integer> queue = new HashMap<>();
+    private static ArrayList<Integer, String, Integer> toysList = new ArrayList<>();
     
     public static void mainMenuChoice() {
         System.out.println("- Главное меню -");
@@ -47,7 +38,7 @@ public class toy_shop {
                 case 1:
                     /* Вывод игрушек */
                     System.out.println("Наши игрушки:");                  
-                    System.out.println(sortTheMap());  // Сортировка по количеству телефонов не работает
+                    System.out.println(getToysList());  // Сортировка по количеству телефонов не работает
                     System.out.println();
                     mainMenuChoice();
 
@@ -68,6 +59,8 @@ public class toy_shop {
                     Integer newtoy_value = newContScanner.nextInt();
 
                     add(newid, newtoy_value);
+                    configureLogger();
+                    toysList.add(newid, newtoy_name, newtoy_value);
                     System.out.println("Игрушка внесена");
                     System.out.println();
                     mainMenuChoice();
@@ -89,21 +82,29 @@ public class toy_shop {
     }
 
     public static void add(Integer id, Integer value) {
-        queue.put(id, value);
-        
+        queue.put(id, value);        
     }
 
-    public class Toys {
-        private Integer toy_id;
-        private String toy_name;
-        private Integer toy_value;
+    public static StringBuilder ToList(Integer id, String name, Integer value) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(Integer.toString(id)).append(name).append(Integer.toString(value));
+        return stringBuilder;            
+    }
 
-        public Toys(Integer toy_id, String toy_name, Integer toy_value) {
-            this.toy_id = toy_id;
-            this.toy_name = toy_name;
-            this.toy_value = toy_value;
+
+    public static HashMap<String, ArrayList<Integer>> getToysList() {
+
+        return queue;
+    }
+
+    public void configureLogger() {
+        try {
+            FileHandler fileHandler = new FileHandler("log.txt");
+            toyList.addHandler(fileHandler);
+        SimpleFormatter formatter = new SimpleFormatter();
+            fileHandler.setFormatter(formatter);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
-
-          
     }
 }
